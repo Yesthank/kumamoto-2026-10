@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>아소 트레킹 안내</title>
+<meta name="description" content="2026.10.18(일) 쿠사센리 → 기시마다케 → 오조다케 → 헬리포트 앞 트레킹 코스 지도와 안전 안내">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%237fa82e%27/%3E%3Cpath d=%27M5 25l8-13 4 6 3-4 7 11z%27 fill=%27%23fff7ee%27/%3E%3C/svg%3E">
+<style>
+:root {
+  --paper: #f4efe4; --paper-2: #ebe4d3; --card: #fbf8f0; --ink: #26211b; --ink-2: #5d5548; --line: #d6cdb8;
+  --green: #5f8a1c; --green-soft: #e6eed3; --red: #c8352b; --red-soft: #f6dcd7; --amber: #a86a00; --amber-soft: #f6e7c4;
+  --blue: #2f66c8; --ring: #1d4ed8;
+  --shadow: 0 6px 20px rgba(54, 40, 20, 0.14), 0 1px 4px rgba(54, 40, 20, 0.1);
+  --font: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", "Yu Gothic", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #14161a; --paper-2: #1b1e24; --card: #20242b; --ink: #eee9dd; --ink-2: #aaa293; --line: #333843;
+    --green: #9cc95a; --green-soft: #26301b; --red: #ff7a6e; --red-soft: #3a211f; --amber: #f0b44c; --amber-soft: #382d16;
+    --blue: #8fb1ff; --ring: #8fb1ff; --shadow: 0 6px 20px rgba(0,0,0,.5), 0 1px 4px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #14161a; --paper-2: #1b1e24; --card: #20242b; --ink: #eee9dd; --ink-2: #aaa293; --line: #333843;
+  --green: #9cc95a; --green-soft: #26301b; --red: #ff7a6e; --red-soft: #3a211f; --amber: #f0b44c; --amber-soft: #382d16;
+  --blue: #8fb1ff; --ring: #8fb1ff; --shadow: 0 6px 20px rgba(0,0,0,.5), 0 1px 4px rgba(0,0,0,.4);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { font-family: var(--font); background: var(--paper); color: var(--ink); font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: var(--blue); }
+:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; border-radius: 6px; }
+h1, h2, h3, p { margin: 0; }
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 16px 48px; }
+
+header.top { display: flex; align-items: center; gap: 12px; padding: 14px 16px 10px; max-width: 860px; margin: 0 auto; }
+.back { text-decoration: none; color: var(--ink-2); font-size: 14px; white-space: nowrap; padding: 6px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); }
+header h1 { font-size: 19px; letter-spacing: -0.01em; }
+header p { font-size: 13px; color: var(--ink-2); }
+
+.live { position: sticky; top: 0; z-index: 1000; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+.live-in { max-width: 860px; margin: 0 auto; padding: 8px 16px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; font-size: 14px; }
+.clock { font-variant-numeric: tabular-nums; font-weight: 800; font-size: 20px; }
+.pill { padding: 3px 10px; border-radius: 999px; font-weight: 700; font-size: 13px; background: var(--paper-2); }
+.pill.ok { background: var(--green-soft); color: var(--green); }
+.pill.warn { background: var(--amber-soft); color: var(--amber); }
+.pill.bad { background: var(--red-soft); color: var(--red); }
+.live-next { color: var(--ink-2); flex: 1 1 220px; min-width: 0; }
+
+.mapbox { position: relative; margin: 12px 0 0; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--line); }
+#map { height: 62vh; min-height: 360px; max-height: 640px; background: var(--paper-2); }
+.mapbtns { position: absolute; z-index: 800; left: 56px; top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+.mapbtns button { font: inherit; font-size: 14px; font-weight: 700; border: 0; border-radius: 999px; padding: 9px 14px; background: var(--card); color: var(--ink); box-shadow: var(--shadow); cursor: pointer; }
+.mapbtns button.on { background: var(--blue); color: #fff; }
+.gps { margin-top: 8px; font-size: 14px; color: var(--ink-2); min-height: 22px; }
+.gps b { color: var(--ink); }
+.gps .off { color: var(--red); font-weight: 700; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 10px; font-size: 13px; color: var(--ink-2); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { display: inline-block; width: 26px; height: 0; border-top: 4px solid; border-radius: 2px; }
+
+section.blk { margin-top: 28px; }
+section.blk > h2 { font-size: 18px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+section.blk > h2 small { font-size: 12.5px; color: var(--ink-2); font-weight: 500; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+.card + .card { margin-top: 10px; }
+.muted { color: var(--ink-2); font-size: 13.5px; }
+
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.stat b { display: block; font-size: 20px; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 12.5px; color: var(--ink-2); }
+
+ol.tl { list-style: none; margin: 0; padding: 0; position: relative; }
+ol.tl::before { content: ""; position: absolute; left: 58px; top: 6px; bottom: 6px; border-left: 2px solid var(--line); }
+.tl li { display: grid; grid-template-columns: 50px 1fr; gap: 18px; padding: 8px 0; position: relative; }
+.tl li::before { content: ""; position: absolute; left: 53px; top: 15px; width: 12px; height: 12px; border-radius: 50%; background: var(--paper); border: 2px solid var(--ink-2); }
+.tl li.now::before { background: var(--blue); border-color: var(--blue); box-shadow: 0 0 0 4px color-mix(in srgb, var(--blue) 25%, transparent); }
+.tl li.done { opacity: 0.55; }
+.tl .t { font-weight: 800; font-variant-numeric: tabular-nums; text-align: right; padding-top: 2px; }
+.tl h3 { font-size: 15.5px; }
+.tl p { font-size: 14px; color: var(--ink-2); }
+.tl .cut { margin-top: 4px; display: inline-block; font-size: 13px; font-weight: 700; color: var(--red); background: var(--red-soft); padding: 2px 9px; border-radius: 8px; }
+.tl .go { cursor: pointer; background: none; border: 0; padding: 0; font: inherit; color: inherit; text-align: left; }
+
+.bus { width: 100%; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.bus th, .bus td { border-bottom: 1px solid var(--line); padding: 7px 6px; text-align: center; }
+.bus th { font-size: 12.5px; color: var(--ink-2); font-weight: 600; }
+.bus tr.main td { font-weight: 800; background: var(--green-soft); }
+.tblwrap { overflow-x: auto; }
+
+.lvl { display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px; align-items: baseline; }
+.lvl dt { font-weight: 700; }
+.lvl dd { margin: 0; color: var(--ink-2); font-size: 14px; }
+.dots { letter-spacing: 2px; color: var(--amber); font-weight: 800; }
+
+ul.list { margin: 0; padding-left: 20px; }
+ul.list li { margin: 4px 0; }
+.risk { border-left: 4px solid var(--amber); }
+.risk.hi { border-left-color: var(--red); }
+.risk h3 { font-size: 15.5px; margin-bottom: 4px; }
+.risk p { font-size: 14px; color: var(--ink-2); }
+.sos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.sos a { display: block; text-decoration: none; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+.sos a b { display: block; font-size: 20px; font-variant-numeric: tabular-nums; color: var(--red); }
+.sos a span { font-size: 13px; color: var(--ink-2); }
+.chk label { display: flex; gap: 10px; align-items: flex-start; padding: 6px 0; border-bottom: 1px dashed var(--line); font-size: 14.5px; }
+.chk input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--green); flex: none; }
+.src { font-size: 13px; color: var(--ink-2); }
+.src li { margin: 3px 0; overflow-wrap: anywhere; }
+.leaflet-container { font-family: var(--font); }
+.lbl { background: var(--card); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 2px 7px; font-size: 12px; font-weight: 700; white-space: nowrap; box-shadow: var(--shadow); }
+.leaflet-tooltip.lbl::before { display: none; }
+
+@media (max-width: 600px) {
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #map { height: 58vh; }
+  .lvl { grid-template-columns: 92px 1fr; }
+  ol.tl::before { left: 50px; }
+  .tl li { grid-template-columns: 44px 1fr; gap: 16px; }
+  .tl li::before { left: 45px; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="back" href="./">← 경로 지도</a>
+  <div>
+    <h1>아소 트레킹 안내</h1>
+    <p>10/18(일) 쿠사센리 → 기시마다케 → 오조다케 → 헬리포트 앞</p>
+  </div>
+</header>
+
+<div class="live" aria-live="polite">
+  <div class="live-in">
+    <span class="clock" id="clock">--:--</span>
+    <span class="pill" id="pill">일본 시각</span>
+    <span class="live-next" id="next">10/18 당일에는 다음 할 일과 버스까지 남은 시간이 여기에 나옵니다.</span>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="mapbox">
+    <div id="map" role="application" aria-label="트레킹 코스 지도"></div>
+    <div class="mapbtns">
+      <button type="button" id="btn-gps">◎ 내 위치</button>
+      <button type="button" id="btn-fit">코스 전체</button>
+    </div>
+  </div>
+  <div class="gps" id="gps">‘내 위치’를 누르면 지도에 현재 위치와 버스 정류장까지의 거리가 나옵니다. (위치 권한 필요, 데이터 연결 필요)</div>
+  <div class="legend">
+    <span><i style="border-color:#2e7d32"></i>A코스(본 경로)</span>
+    <span><i style="border-color:#c2410c;border-top-style:dashed"></i>오조다케 왕복(개략선)</span>
+    <span><i style="border-color:#2f66c8;border-top-style:dotted"></i>단축·대체 길</span>
+    <span><i style="border-color:#7c3aed;border-top-style:dashed"></i>정류장까지 걷는 길</span>
+  </div>
+
+  <section class="blk">
+    <h2>코스 요약</h2>
+    <div class="stats">
+      <div class="stat"><b>약 6.2km</b><span>오조다케 포함 (A코스만 4.6km)</span></div>
+      <div class="stat"><b>약 500m</b><span>누적 오르막 (10/15 같은 코스 기록 520m)</span></div>
+      <div class="stat"><b>2.5~3시간</b><span>걷는 시간 예상 (점심 별도)</span></div>
+      <div class="stat"><b>1,326m</b><span>최고점 기시마다케 (출발 약 1,140m)</span></div>
+    </div>
+    <p class="muted" style="margin-top:8px">거리는 OpenStreetMap 등산로 선을 따라 잰 값입니다. 오조다케 구간은 지도 데이터(국토지리원·OSM 모두)에 길이 없어 직선에 가까운 개략선이라 실제로는 조금 더 깁니다. 10/15 같은 코스 YAMAP 기록은 6.6km, 휴식 포함 4시간 2분(휴식 1시간 10분)이었습니다.</p>
+  </section>
+
+  <section class="blk">
+    <h2>시간 계획 <small>목표 시각 · 빨간 글씨는 반드시 지킬 마감</small></h2>
+    <div class="card"><ol class="tl" id="tl"></ol></div>
+  </section>
+
+  <section class="blk">
+    <h2>하산 버스 <small>아소 등산선, 2026.5.11 개정 공식 시간표(평일·토·일 공통)</small></h2>
+    <div class="card tblwrap">
+      <table class="bus">
+        <thead><tr><th>편</th><th>산상 터미널</th><th>헬리포트 앞</th><th>쿠사센리</th><th>아소역 앞</th></tr></thead>
+        <tbody>
+          <tr><td>7편</td><td>14:50</td><td>14:52</td><td>14:55</td><td>15:23</td></tr>
+          <tr class="main"><td>8편 ★</td><td>15:40</td><td>15:42</td><td>15:45</td><td>16:13</td></tr>
+          <tr><td>9편 막차</td><td>16:30</td><td>16:32</td><td>16:35</td><td>17:03</td></tr>
+        </tbody>
+      </table>
+      <p class="muted" style="margin-top:8px">아소역에서 JR 16:45(438D)를 타려면 8편까지만 됩니다. 오후 하산 편은 공식표에 모두 ‘혼잡’ 표시가 있어 만석이면 못 탈 수 있습니다. 헬리포트 앞은 쿠사센리보다 한 정류장 앞이라 조금 유리하지만 산상 터미널에서 이미 찰 수 있으니 15:35까지 정류장에 서 있으세요. 운임 아소역까지 1,000엔, 현금 또는 터치 결제(Suica 불가).</p>
+    </div>
+  </section>
+
+  <section class="blk">
+    <h2>난이도 <small>하프마라톤 2시간 이내 · 184cm/79kg · 등산은 가끔</small></h2>
+    <div class="card">
+      <dl class="lvl">
+        <dt>체력</dt><dd><span class="dots">●○○</span> 쉬움. 오르막 500m, 6km 정도는 심폐로는 부담이 없습니다. 오히려 너무 빨리 올라가서 땀에 젖은 뒤 정상 바람에 식는 쪽을 조심하세요.</dd>
+        <dt>길 찾기</dt><dd><span class="dots">●●●</span> 이 코스에서 가장 어렵습니다. A코스는 공식 지도에 있는 길이지만, 오조다케 구간은 국토지리원 지도와 OSM 어디에도 길이 없습니다. 10/15에 같은 코스를 간 사람이 키만 한 억새 때문에 발밑이 안 보여 길을 잃었습니다.</dd>
+        <dt>발밑</dt><dd><span class="dots">●●○</span> 기시마다케는 계단과 화산 자갈(스코리아) 길이고, 정상에서 오조다케 쪽 안부로는 ‘급한 내리막’이라는 기록이 있습니다. 로드 러닝화로는 마른 풀길·계단은 괜찮지만 자갈 내리막과 젖은 풀에서 미끄러지기 쉽습니다.</dd>
+        <dt>날씨 노출</dt><dd><span class="dots">●●○</span> 나무가 거의 없는 능선이라 바람과 햇볕을 그대로 받습니다. 10/16 기록에 아침저녁으로 갑자기 추워졌다고 합니다.</dd>
+        <dt>시간 압박</dt><dd><span class="dots">●●○</span> 체력보다 ‘15:42 버스’가 진짜 제약입니다. 위 마감 시각만 지키면 여유가 40분쯤 남습니다.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="blk">
+    <h2>위험 요소와 대처</h2>
+    <div class="card risk hi"><h3>오조다케 길을 놓침</h3><p>억새가 키만큼 자라 길이 안 보일 수 있습니다. 길이 안 보이면 덤불을 헤치고 나가지 말고 <b>마지막으로 확실했던 지점까지 되돌아가세요</b>. 돌아올 때 ‘고오이케(古御池) 화구를 돌아가는 지름길’로 새지 말고 왔던 길로 갈림길까지 돌아오세요(10/15 기록자가 그 길에서 헤맸습니다). 이 페이지의 ‘내 위치’로 경로에서 얼마나 벗어났는지 볼 수 있습니다.</p></div>
+    <div class="card risk hi"><h3>버스를 놓침</h3><p>8편(헬리포트 앞 15:42)을 놓치면 9편(16:32)이 막차이고, 이 경우 아소역 JR 16:45는 못 탑니다. 그다음 열차 시각은 조사하지 못했으니 JR규슈 앱이나 역에서 확인하세요. 막차까지 놓치면 걸어 내려가지 말고 택시를 부르세요(아소역까지 산길 약 11~13km).</p></div>
+    <div class="card risk"><h3>화산 가스·분화</h3><p>10/16 기준 분화 경계 레벨 2, 나카다케 화구 반경 약 1km 출입 금지입니다. 이 코스는 그 밖이지만, 현장 방송이나 사이렌으로 대피 안내가 나오면 즉시 따르세요. 천식이 있다면 화산 가스에 특히 주의해야 합니다.</p></div>
+    <div class="card risk"><h3>바람·추위·안개</h3><p>정상과 능선은 바람이 아주 셉니다. 안개가 끼면 풀밭 능선에서 방향을 잃기 쉬우니, 오조다케는 시야가 좋을 때만 가세요. 비가 오면 풀과 자갈이 미끄러우니 A코스만 하세요.</p></div>
+    <div class="card risk"><h3>새 러닝화</h3><p>오늘 미리 1시간 정도 신어서 쓸리는 곳이 없는지 확인하세요. 내리막에서 발이 앞으로 밀리지 않게 끈을 단단히(힐록 매듭) 묶고, 물집 밴드를 챙기세요. 메시 갑피라 화산재가 들어오고 하얀 색이면 더러워집니다.</p></div>
+    <div class="card risk"><h3>쿠사센리 초원의 말</h3><p>10/15에 ‘쿠사센리 출입 불가’ 안내 방송이 있었는데, 기록자는 말에게 차이는 사고 때문인 것 같다고 적었습니다. 초원 안쪽 이야기로 보이며 등산로와는 별개입니다. 말 뒤로는 지나가지 마세요.</p></div>
+  </section>
+
+  <section class="blk">
+    <h2>준비물 <small>체크하면 이 기기에 저장됩니다</small></h2>
+    <div class="card chk" id="chk"></div>
+  </section>
+
+  <section class="blk">
+    <h2>비상 연락</h2>
+    <div class="sos">
+      <a href="tel:119"><b>119</b><span>구급·화재(산악 구조 포함)</span></a>
+      <a href="tel:110"><b>110</b><span>경찰</span></a>
+      <a href="tel:+815038162787"><b>050-3816-2787</b><span>Japan Visitor Hotline, 24시간, 한국어 가능 (+81-50-3816-2787)</span></a>
+      <a href="tel:0570080411"><b>0570-08-0411</b><span>아소산상 터미널 (0570 번호는 해외 유심에서 안 걸릴 수 있음)</span></a>
+    </div>
+    <p class="muted" style="margin-top:8px">신고할 때는 ‘内容(무슨 일) → 場所(어디) → 인원’ 순서로 말하고, 위치는 이 페이지 ‘내 위치’에 나오는 위도·경도를 불러 주면 됩니다.</p>
+  </section>
+
+  <section class="blk">
+    <h2>당일 아침 확인</h2>
+    <div class="card">
+      <ul class="list">
+        <li><a href="https://www.aso-volcano.jp/" target="_blank" rel="noopener">阿蘇火山防災会議協議会</a> — 당일 화구 규제·가스 상황</li>
+        <li><a href="https://www.data.jma.go.jp/vois/data/report/volinfo/VK20260814163000_503.html" target="_blank" rel="noopener">気象庁 阿蘇山 화산 정보</a> · <a href="https://tenki.jp/lite/bousai/volcano/503/" target="_blank" rel="noopener">tenki.jp 분화 경계 레벨</a></li>
+        <li><a href="https://www.sankobus.jp/bus/asosen/" target="_blank" rel="noopener">산코버스 아소 등산선</a> · <a href="https://www.sankobus.jp/bus/asosanjo/" target="_blank" rel="noopener">아소산상선(직행버스)</a> 운행 상황</li>
+        <li><a href="https://tenki.jp/forecast/9/46/8620/43214/" target="_blank" rel="noopener">tenki.jp 아소시 날씨</a> — 비·강풍이면 오조다케는 빼기</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="blk">
+    <h2>출처</h2>
+    <ul class="src">
+      <li>등산로 선: © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL). 오조다케 구간은 국토지리원 표고점(1159)과 정상(1237.3)을 이은 개략선</li>
+      <li>배경 지도: <a href="https://maps.gsi.go.jp/development/ichiran.html">国土地理院</a> 標準地図·写真, OpenStreetMap</li>
+      <li>A코스 구간 시간: 쿠사센리 트레킹 지도(국토지리원 지형도 위에 작성된 안내도, 사용자 제공 사진)</li>
+      <li>버스 시각: <a href="https://www.sankobus.jp/busportal/wp-content/uploads/tt-asotozansen-20260511.pdf">산코버스 아소 등산선 시간표(2026.5.11)</a></li>
+      <li>최근 기록: <a href="https://yamap.com/activities/51970209/article">YAMAP 10/15 杵島岳→往生岳</a>, <a href="https://yamap.com/activities/51984012">10/16 杵島岳</a>, <a href="https://yamap.com/activities/51959142">10/14 烏帽子岳·杵島岳</a></li>
+      <li>화산 규제: 阿蘇火山防災会議協議会(9/2 1차 규제), 気象庁(10/9 레벨 2 유지)</li>
+      <li>Japan Visitor Hotline: <a href="https://www.japan.travel/en/plan/hotline/">JNTO</a></li>
+    </ul>
+  </section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+<script src="trek-geom.js"></script>
+<script>
+(function () {
+  'use strict';
+  var G = window.TREK_GEOM;
+  var DAY = '2026-10-18';
+  var BUS_K = [32.88540, 131.05260], HELI = [32.88431, 131.06422];
+  var FORK = G.rimA[G.rimA.length - 1], JUNC = G.rimB[G.rimB.length - 1], TRAIL = G.climb[0], NORTH = G.toNorth[G.toNorth.length - 1];
+
+  // ---------- 시간 계획 ----------
+  var PLAN = [
+    { t: '11:32', ll: BUS_K, h: '쿠사센리 아소화산박물관 앞 하차', p: '화장실을 들르고 물을 확인합니다. 바람막이를 꺼내 둡니다.' },
+    { t: '11:45', ll: TRAIL, h: '동쪽 등산로 입구 출발', p: '박물관 앞에서 도로를 따라 동쪽으로 조금 가면 입구(草千里駐車場東登山口)입니다.', cut: '12:05까지 출발 못 하면 오조다케는 빼고 A코스만' },
+    { t: '12:20', ll: [32.89260, 131.05780], h: '기시마다케 정상 1,326m', p: '계단과 자갈길로 약 1km, 오르막 약 190m. 정상에서 작은 화구 북쪽으로 돌아갑니다.' },
+    { t: '12:35', ll: FORK, h: '오조다케 갈림길(큰 화구 북서쪽)', p: '여기서부터 오조다케 쪽은 지도에 길이 없습니다. 길이 보이고 시야가 좋을 때만 들어갑니다.', cut: '13:15보다 늦으면 오조다케는 생략하고 화구 둘레를 따라 진행' },
+    { t: '13:05', ll: [32.90187, 131.06568], h: '오조다케 1,238m · 점심', p: '안부로 내려갔다가 약 100m 올라갑니다. 정상은 사람이 적고 구주 연산이 보입니다. 점심은 25분 이내로.', cut: '13:45에는 어디에 있든 돌아서기' },
+    { t: '14:00', ll: FORK, h: '갈림길 복귀', p: '왔던 길로 돌아옵니다. 古御池 화구를 질러가는 길로 새지 않습니다.' },
+    { t: '14:30', ll: JUNC, h: '큰 화구 둘레를 돌아 남쪽 갈림길', p: '화구 동쪽 둘레(약 1.4km)를 돌아 내려옵니다. 지칠 때는 이 구간이 길게 느껴집니다.', cut: '14:50까지는 하산 시작' },
+    { t: '14:55', ll: HELI, h: '헬리포트 앞(ヘリポート前) 정류장', p: '1225 지점을 지나 약 1.2km 내리막. 7편(14:52)은 보내도 됩니다.', cut: '15:35까지 정류장에 서 있기' },
+    { t: '15:42', ll: HELI, h: '아소 등산선 8편 탑승 → 아소역 16:13', p: '아소역 우솝 동상 → JR 16:45 → 구마모토역 18:06.' }
+  ];
+  var toMin = function (s) { var a = s.split(':'); return +a[0] * 60 + +a[1]; };
+  var tl = document.getElementById('tl');
+  PLAN.forEach(function (c, i) {
+    var li = document.createElement('li');
+    li.innerHTML = '<span class="t">' + c.t + '</span><div><button type="button" class="go" data-i="' + i + '"><h3>' + c.h + '</h3></button><p>' + c.p + '</p>' +
+      (c.cut ? '<span class="cut">⏰ ' + c.cut + '</span>' : '') + '</div>';
+    tl.appendChild(li);
+  });
+
+  // ---------- 지도 ----------
+  var map = L.map('map', { zoomControl: true, attributionControl: true });
+  var gsiAttr = '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">国土地理院</a>';
+  var base = {
+    '지형도(国土地理院)': L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', { maxZoom: 18, maxNativeZoom: 18, attribution: gsiAttr }),
+    '항공사진(国土地理院)': L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg', { maxZoom: 18, maxNativeZoom: 18, attribution: gsiAttr }),
+    'OpenStreetMap': L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' })
+  };
+  base['지형도(国土地理院)'].addTo(map);
+  L.control.layers(base, null, { position: 'topright' }).addTo(map);
+  L.control.scale({ imperial: false }).addTo(map);
+  map.attributionControl.addAttribution('등산로 &copy; OpenStreetMap contributors (ODbL)');
+
+  var line = function (pts, o) { return L.polyline(pts, Object.assign({ weight: 5, opacity: 0.95, lineCap: 'round', lineJoin: 'round' }, o)); };
+  var halo = function (pts) { return L.polyline(pts, { color: '#ffffff', weight: 9, opacity: 0.85 }); };
+  var MAIN = ['climb', 'toNorth', 'rimA', 'rimB', 'descent'];
+  var grp = L.featureGroup().addTo(map);
+  MAIN.concat(['ojo']).forEach(function (k) { halo(G[k]).addTo(grp); });
+  line(G.approach, { color: '#7c3aed', dashArray: '6 8', weight: 4 }).bindTooltip('정류장 → 등산로 입구', { sticky: true }).addTo(grp);
+  line(G.loopWest, { color: '#2f66c8', dashArray: '2 8', weight: 4 }).bindTooltip('작은 화구 서쪽 둘레(선택)', { sticky: true }).addTo(grp);
+  line(G.shortcut, { color: '#2f66c8', dashArray: '2 8', weight: 4 }).bindTooltip('단축로: 정상을 거치지 않고 입구 쪽으로', { sticky: true }).addTo(grp);
+  line(G.roadBack, { color: '#7c3aed', dashArray: '6 8', weight: 4 }).bindTooltip('등산로 입구 ↔ 헬리포트 앞 (도로 옆 길, 약 15분)', { sticky: true }).addTo(grp);
+  MAIN.forEach(function (k) { line(G[k], { color: '#2e7d32' }).bindTooltip('A코스', { sticky: true }).addTo(grp); });
+  line(G.ojo, { color: '#c2410c', dashArray: '10 9' }).bindTooltip('오조다케 왕복 — 개략선, 지도에 길 없음', { sticky: true }).addTo(grp);
+
+  var pin = function (ll, txt, color, dir) {
+    L.circleMarker(ll, { radius: 7, color: '#fff', weight: 2, fillColor: color, fillOpacity: 1 }).addTo(grp)
+      .bindTooltip(txt, { permanent: true, direction: dir || 'right', className: 'lbl', offset: [8, 0] });
+  };
+  pin(BUS_K, '🚏 쿠사센리(박물관 앞) 11:32 도착', '#7c3aed', 'left');
+  pin(HELI, '🚏 헬리포트 앞 15:42', '#c8352b', 'right');
+  pin(TRAIL, '등산로 입구', '#2e7d32', 'right');
+  pin([32.89260, 131.05780], '▲ 기시마다케 1,326', '#26211b', 'left');
+  pin([32.90187, 131.06568], '▲ 오조다케 1,238', '#26211b', 'right');
+  pin(FORK, '갈림길 13:15 마감', '#c2410c', 'left');
+  pin(JUNC, '하산 시작 14:50 마감', '#2e7d32', 'left');
+  pin([32.88922, 131.06202], '1225', '#5d5548', 'right');
+
+  var fit = function () { map.fitBounds(grp.getBounds(), { padding: [24, 24] }); };
+  fit();
+  document.getElementById('btn-fit').onclick = fit;
+  tl.addEventListener('click', function (e) {
+    var b = e.target.closest('.go'); if (!b) return;
+    map.flyTo(PLAN[+b.dataset.i].ll, 16, { duration: 0.6 });
+    document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  // ---------- 거리 계산 ----------
+  var R = 6371000, rad = Math.PI / 180;
+  function dist(a, b) {
+    var la = (a[0] + b[0]) / 2 * rad;
+    return R * Math.hypot((b[0] - a[0]) * rad, (b[1] - a[1]) * rad * Math.cos(la));
+  }
+  function segDist(p, a, b) {
+    var k = Math.cos(p[0] * rad), ax = a[1] * k, ay = a[0], bx = b[1] * k, by = b[0], px = p[1] * k, py = p[0];
+    var dx = bx - ax, dy = by - ay, t = dx || dy ? ((px - ax) * dx + (py - ay) * dy) / (dx * dx + dy * dy) : 0;
+    t = Math.max(0, Math.min(1, t));
+    return dist(p, [ay + t * dy, (ax + t * dx) / k]);
+  }
+  var ALL = ['approach', 'climb', 'toNorth', 'rimA', 'rimB', 'descent', 'ojo', 'loopWest', 'shortcut', 'roadBack'];
+  function offRoute(p) {
+    var m = Infinity;
+    ALL.forEach(function (k) { var s = G[k]; for (var i = 0; i < s.length - 1; i++) m = Math.min(m, segDist(p, s[i], s[i + 1])); });
+    return m;
+  }
+
+  // ---------- 내 위치 ----------
+  var gpsEl = document.getElementById('gps'), btn = document.getElementById('btn-gps');
+  var watch = null, me = null, acc = null, first = true;
+  btn.onclick = function () {
+    if (watch !== null) { navigator.geolocation.clearWatch(watch); watch = null; btn.classList.remove('on'); gpsEl.textContent = '위치 추적을 껐습니다.'; return; }
+    if (!('geolocation' in navigator)) { gpsEl.innerHTML = '<span class="off">이 브라우저는 위치 기능을 지원하지 않습니다.</span>'; return; }
+    btn.classList.add('on'); first = true; gpsEl.textContent = '위치를 찾는 중…';
+    watch = navigator.geolocation.watchPosition(function (pos) {
+      var p = [pos.coords.latitude, pos.coords.longitude], a = pos.coords.accuracy;
+      if (!me) {
+        me = L.circleMarker(p, { radius: 8, color: '#fff', weight: 3, fillColor: '#2f66c8', fillOpacity: 1 }).addTo(map);
+        acc = L.circle(p, { radius: a, color: '#2f66c8', weight: 1, fillOpacity: 0.12 }).addTo(map);
+      } else { me.setLatLng(p); acc.setLatLng(p).setRadius(a); }
+      if (first) { map.setView(p, Math.max(map.getZoom(), 15)); first = false; }
+      var off = offRoute(p), dh = dist(p, HELI), dk = dist(p, BUS_K);
+      var far = dk > 20000;
+      gpsEl.innerHTML = far
+        ? '현재 위치는 코스에서 멀리 있습니다(쿠사센리까지 직선 ' + (dk / 1000).toFixed(1) + 'km). 정확도 ±' + Math.round(a) + 'm'
+        : '헬리포트 앞 정류장까지 직선 <b>' + (dh >= 1000 ? (dh / 1000).toFixed(2) + 'km' : Math.round(dh) + 'm') + '</b> · ' +
+          (off > 60 ? '<span class="off">표시된 길에서 약 ' + Math.round(off) + 'm 벗어남</span>' : '길 위(오차 ' + Math.round(off) + 'm)') +
+          ' · 정확도 ±' + Math.round(a) + 'm · <span style="user-select:all">' + p[0].toFixed(5) + ', ' + p[1].toFixed(5) + '</span>';
+    }, function (err) {
+      gpsEl.innerHTML = '<span class="off">위치를 가져오지 못했습니다(' + (err.code === 1 ? '권한 거부' : '신호 없음') + ').</span>';
+      btn.classList.remove('on'); if (watch !== null) navigator.geolocation.clearWatch(watch); watch = null;
+    }, { enableHighAccuracy: true, maximumAge: 10000, timeout: 20000 });
+  };
+
+  // ---------- 일본 시각 · 남은 시간 ----------
+  var fmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Tokyo', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
+  var clock = document.getElementById('clock'), pill = document.getElementById('pill'), next = document.getElementById('next');
+  var items = tl.children;
+  function tick() {
+    var parts = {}; fmt.formatToParts(new Date()).forEach(function (x) { parts[x.type] = x.value; });
+    var date = parts.year + '-' + parts.month + '-' + parts.day, hh = parts.hour === '24' ? '00' : parts.hour;
+    var now = +hh * 60 + +parts.minute;
+    clock.textContent = hh + ':' + parts.minute;
+    if (date !== DAY) {
+      pill.className = 'pill'; pill.textContent = '일본 시각';
+      next.textContent = date < DAY ? '10/18 당일에는 다음 할 일과 버스까지 남은 시간이 여기에 나옵니다.' : '트레킹 날(10/18)이 지났습니다.';
+      for (var j = 0; j < items.length; j++) items[j].className = '';
+      return;
+    }
+    var bus = toMin('15:42') - now, cur = -1;
+    PLAN.forEach(function (c, i) { if (toMin(c.t) <= now) cur = i; });
+    for (var i = 0; i < items.length; i++) items[i].className = i < cur ? 'done' : i === cur ? 'now' : '';
+    var nx = PLAN[cur + 1];
+    if (bus > 0) {
+      pill.className = 'pill ' + (bus > 60 ? 'ok' : bus > 20 ? 'warn' : 'bad');
+      pill.textContent = '15:42 버스까지 ' + (bus >= 60 ? Math.floor(bus / 60) + '시간 ' : '') + (bus % 60) + '분';
+      next.textContent = nx ? '다음: ' + nx.t + ' ' + nx.h + (nx.cut ? ' · ' + nx.cut : '') : '';
+    } else {
+      pill.className = 'pill'; pill.textContent = '8편 출발 시각 지남';
+      next.textContent = '놓쳤다면 9편(헬리포트 앞 16:32)이 막차입니다. JR 16:45는 못 탑니다.';
+    }
+  }
+  tick(); setInterval(tick, 15000);
+
+  // ---------- 준비물 체크 ----------
+  var GEAR = ['바람막이 또는 얇은 패딩(정상 바람)', '물 1L 이상', '점심(주먹밥·빵) + 간식', '선크림·모자·선글라스(그늘 없음)',
+    '휴대폰 완충 + 보조배터리', 'YAMAP 앱 설치 + 아소 지도 미리 받기(오프라인 대비)', '물집 밴드, 작은 수건', '현금(등산선 1,000엔 + JR 1,300엔)',
+    '우비(비 예보면)', '여분 양말(풀숲 이슬)'];
+  var KEY = 'trek-gear-1018', saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { saved = {}; }
+  var chk = document.getElementById('chk');
+  GEAR.forEach(function (g, i) {
+    var l = document.createElement('label');
+    l.innerHTML = '<input type="checkbox" data-i="' + i + '"' + (saved[i] ? ' checked' : '') + '><span>' + g + '</span>';
+    chk.appendChild(l);
+  });
+  chk.addEventListener('change', function (e) {
+    saved[e.target.dataset.i] = e.target.checked;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (err) { /* 저장 불가 환경 */ }
+  });
+})();
+</script>
+</body>
+</html>
