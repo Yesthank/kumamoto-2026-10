@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>구마모토 2박 3일 경로 지도</title>
+<meta name="description" content="2026.10.17~10.19 구마모토 2박 3일 여행을 움직이는 경로 지도로 보여 주는 정적 페이지입니다.">
+<meta name="color-scheme" content="light dark">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%276%27 fill=%27%23c8352b%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%276%27 fill=%27%23fff7ee%27/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <span class="seal" aria-hidden="true">熊本</span>
+      <div class="brand-text">
+        <h1>구마모토 2박 3일 경로 지도</h1>
+        <p>2026.10.17(토) ~ 10.19(월)</p>
+      </div>
+    </div>
+    <div class="tabs" role="tablist" aria-label="일차 선택">
+      <button type="button" role="tab" class="tab" data-tab="0" style="--c:var(--d1)" aria-selected="false"><i></i>1일차</button>
+      <button type="button" role="tab" class="tab" data-tab="1" style="--c:var(--d2)" aria-selected="false"><i></i>2일차</button>
+      <button type="button" role="tab" class="tab" data-tab="2" style="--c:var(--d3)" aria-selected="false"><i></i>3일차</button>
+      <button type="button" role="tab" class="tab" data-tab="all" style="--c:var(--ink)" aria-selected="true"><i></i>전체</button>
+    </div>
+  </header>
+
+  <main class="stage">
+    <section class="mapwrap" aria-label="경로 지도">
+      <div id="map" role="application" aria-label="구마모토 경로 지도"></div>
+
+      <div class="hud" aria-live="off">
+        <div class="hud-day" id="hud-day">대기 중</div>
+        <div class="hud-time" id="hud-time">--:--</div>
+        <div class="hud-status" id="hud-status">재생 버튼을 눌러 시작하세요</div>
+      </div>
+      <div class="banner" id="banner" aria-hidden="true"></div>
+
+      <div class="controls" id="controls">
+        <button type="button" class="btn btn-play" id="btn-play" aria-label="재생">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path id="ico-play" d="M8 5.5v13l11-6.5z"/></svg>
+          <span id="lbl-play">재생</span>
+        </button>
+        <button type="button" class="btn btn-ghost" id="btn-replay" aria-label="처음부터 다시 재생">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V2L7 6.5 12 11V8a5 5 0 1 1-5 5H5a7 7 0 1 0 7-8z"/></svg>
+          <span>처음부터</span>
+        </button>
+        <div class="speed" role="group" aria-label="재생 속도">
+          <button type="button" class="sp on" data-speed="1" aria-pressed="true">1x</button>
+          <button type="button" class="sp" data-speed="2" aria-pressed="false">2x</button>
+          <button type="button" class="sp" data-speed="4" aria-pressed="false">4x</button>
+        </div>
+        <label class="follow"><input type="checkbox" id="follow" checked><span>카메라 따라가기</span></label>
+        <input type="range" class="scrub" id="scrub" min="0" max="1000" value="0" aria-label="재생 위치">
+      </div>
+    </section>
+
+    <aside class="sheet" aria-label="장소 카드와 일정">
+      <div id="card" class="card-slot" aria-live="polite"></div>
+      <nav id="list" class="list" aria-label="일정 목록"></nav>
+      <div id="cost-m" class="cost cost--m"></div>
+      <p class="credit">사진과 지도 출처는 <a href="LICENSES.md">LICENSES.md</a>에 정리했습니다. 정류장 사이의 선은 실제 도로나 선로가 아닌 개략 경로입니다.</p>
+    </aside>
+
+    <footer id="cost-d" class="cost cost--d"></footer>
+  </main>
+</div>
+<noscript><p style="padding:16px">이 페이지는 JavaScript가 필요합니다.</p></noscript>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
